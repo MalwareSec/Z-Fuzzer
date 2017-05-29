@@ -2,6 +2,7 @@
 # 0x5A = 'Z'
 import sys
 import socket
+import getopt
 from time import sleep
 
 #Defining Global Variables
@@ -10,16 +11,17 @@ ssh = 22
 tln = 23
 smtp = 25
 
-buff = '0x5A' * 50
 
-def fuzzer_loop(target, port):
+def fuzzer_loop():
+    global buff
+    buff = '0x5A' * 50
     while True:
         try:
             s=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             s.settimeout(5)
             s.connect((target, port))
             s.recv(1024)
-
+                        
             print "Sending Buffer with length: "+str(len(buff))
             s.send(buff)
             s.close()
@@ -85,6 +87,6 @@ def main():
             assert False, 'Unhandled Option'
 
     if len(target) and port > 0:
-        fuzzer_loop(target, port)
+        fuzzer_loop()
 
 main()
